@@ -1,0 +1,26 @@
+A feladatok megoldására elkészített SQL parancsokat illessze be a feladat sorszáma után!
+***
+14. feladat
+CREATE DATABASE csudijo 
+DEFAULT CHARACTER SET utf8 
+COLLATE utf8_hungarian_ci;
+***
+
+16. feladat
+SELECT COUNT(id) AS `etelek-szama` FROM termekek WHERE etel = 1;
+***
+
+17. feladat
+SELECT termekek.nev, termekek.ar FROM termekek, kategoriak WHERE kategoriak.id='6' AND termekek.kategoriaId = kategoriak.id ORDER BY termekek.nev;
+***
+
+18. feladat
+INSERT INTO termekek (nev, ar, kategoriaId, etel) VALUES('Málnahabos pohárkrém', '1090','6','1');
+***
+
+19. feladat
+SELECT termekek.nev, SUM(rendelesek.mennyiseg) as mennyiseg FROM termekek, rendelesek WHERE etel = 1 AND termekek.id = rendelesek.termekId GROUP BY termekek.nev ORDER BY mennyiseg DESC LIMIT 3;
+***
+
+20. feladat
+SELECT SUM(termekek.ar*rendelesek.mennyiseg) as brutto, ROUND(SUM(termekek.ar*rendelesek.mennyiseg*(1-1/(1+afakulcs))),0) AS afa FROM termekek, rendelesek WHERE termekek.id = rendelesek.termekId;

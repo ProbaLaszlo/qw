@@ -1,0 +1,119 @@
+-----------------------------------------------
+
+	Konzolos lambda utasítások
+
+-----------------------------------------------
+
+**
+--  beolvasás és lista létrehozása
+**
+
+        static List<Hegyek> hegyek = new List<Hegyek>();
+        static void Beolvas()
+        {
+            string[] sorok = File.ReadAllLines("hegyekMo.txt");
+            for (int i = 1; i < sorok.Length; i++)
+            {
+                hegyek.Add(new Hegyek(sorok[i]));
+            }
+        }
+
+=======================================
+
+**
+--  megszámlálás
+**
+Console.WriteLine($"3. feladat: Hegycsúcsok száma: {hegyek.Count} db");
+
+=======================================
+
+**
+--  Átlag számítás 2 tizedes jegyig
+**
+
+Console.WriteLine($"\n4. feladat: A hegyek magasságának az átlaga: {hegyek.Average(item => item.magassag):f2}m.");
+
+=======================================
+
+**
+--  Rendezés növekvő sorrendbe és maximum megállapítása:
+**
+
+var sorrend = hegyek.OrderBy(item => item.magassag);
+Console.WriteLine($"\n\tHegycsúcs: {sorrend.Last().hegycsucs}\n\tHegység: {sorrend.Last().hegyseg}\n\tMagasság: {sorrend.Last().magassag}");
+
+=======================================
+
+**
+--  Adatbekérés és where és any használata:
+**
+
+Console.Write("\n6. feladat: Kérek egy magasságot: ");
+int input = int.Parse(Console.ReadLine());
+Console.WriteLine($"{(hegyek.Where(item => item.hegyseg == "Börzsöny").Any(item2 => item2.magassag > input) ? "igen van" : "nincs")} magasabb hegycsúcs {input}m-nél a Börzsönyben");
+
+=======================================
+
+**
+--  Statisztika. foreach és kulcs érték pár:
+**
+
+Console.WriteLine($"\n8. feladat: Hegység statisztika:\n");
+var hegyMagassagok = hegyek.GroupBy(item => item.hegyseg);
+foreach (var hegynev in hegyMagassagok)
+{
+    Console.WriteLine($"\t{hegynev.Key} - {hegynev.Count()}db");
+}
+
+=======================================
+
+**
+--  Fájl írása, where:
+**
+
+      StreamWriter iras = new StreamWriter("bukk-videk.txt");
+      iras.WriteLine($"Hegycsúcs neve; Magasság láb");
+
+      var BukkHegyseg = hegyek.Where(item => item.hegyseg == "Bükk-vidék");
+      foreach (var hegyadatok in BukkHegyseg)
+      {
+          iras.WriteLine($"{hegyadatok.hegycsucs};{hegyadatok.magassag * 3.280839895:f2}");
+      }
+      iras.Close();
+      Console.WriteLine($"\n9.feladat: bukk-videk.txt");
+
+=======================================
+
+**
+--  Statisztika. foreach és kulcs érték pár order by, select, distinc, count:
+**
+
+foreach (var item in orszagok.OrderBy(item=>item.datum).Select(item=> item.datum.Split('.')[0]).Distinct())
+{
+    Console.WriteLine($"\t{item} - {orszagok.Count(item2 => item2.datum.Split('.')[0] == item)}");
+}
+
+=======================================
+
+**
+--  Find:
+**
+
+Console.WriteLine($"5. feladat: Magyarország csatlakozásának dátuma: {orszagok.Find(item => item.nev == "Magyarország").datum }");
+
+=======================================
+
+**
+--  Any
+**
+Console.WriteLine($"6. feladat: Májusban {(orszagok.Any(item => item.datum.Split('.')[1] == "05") ? "volt" : "nem volt")} csatlakozás!");
+
+=======================================
+
+
+
+
+
+
+
+

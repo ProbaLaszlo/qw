@@ -1,0 +1,281 @@
+---------------------------------------
+
+		Grafikus
+
+---------------------------------------
+
+****				 
+------ Ingatlan osztály ------
+****
+
+**				 
+-- Tagváltozók --
+**
+        //tagváltozók létrehozása:
+        #region 1.feladat
+        private int iranyar, telekmeret;
+        protected string tipus;
+        private string cim;
+        #endregion
+
+-----------------------------------------
+
+**				 
+-- Írható és olvastható tulajdonságok--
+**
+ //Cim írható és olvasható tulajdonság letrehozása:
+        #region 2.feladat
+        public string Cim
+        {
+            get
+            {
+                return cim;
+            }
+            set
+            {
+                cim = value;
+            }
+
+        }
+        #endregion
+
+-----------------------------------------
+
+ #region 3.feladat
+        public int Iranyar
+        {
+            get
+            {
+
+                return iranyar;
+            }
+            set
+            {
+                if (value>100000)
+                {
+                    iranyar = value;
+                }
+                else
+                {
+                    throw new Exception("Az irányárnak 100.000 Ft-nál nagyobbnak kell lennie");    
+                }
+            }
+        }
+        #endregion
+
+-----------------------------------------
+
+**				 
+-- Konstruktorok létrehozása--
+**
+        //Konstruktorok létrehozása
+        #region 5.feladat
+        //A _telekmeret és a _cim Tulajdonságokkal lett beállítva
+        public Ingatlan(string _cim, int _telekmeret, int _iranyar)
+        {
+            Iranyar = _iranyar;
+            Telekmeret = _telekmeret;
+            cim = _cim;
+        }
+
+        //Csak a _cim és _telekmeret paramétereket fogadja, irányár értéke 1.000.000 Ft.
+        public Ingatlan(string _cim, int _telekmeret)
+        {
+            cim = _cim;
+            Telekmeret = _telekmeret;
+            iranyar = 1000000;
+           
+        }
+        #endregion
+
+
+-----------------------------------------
+
+**				 
+-- A ToString() metódus felüldefiniálása --
+**
+
+        //A ToString() metódus felüldefiniálása
+        #region 6.feladat
+        public override string ToString()
+        {
+            return $"{cim}-i, {telekmeret}-es {tipus} eladó {iranyar} Ft-ért.";
+        }
+
+
+-----------------------------------------
+
+
+****				 
+------ Telek osztály ------
+****
+
+**				 
+-- Konstruktor ősosztállyal --
+**
+        #region 8.feladat
+        public Telek(string _cim, int _telekmeret, bool _beepitheto_e, int _negyzetmeterenkenti_ar)
+            :base(_cim,_telekmeret, _telekmeret * _negyzetmeterenkenti_ar)
+        {
+            tipus = "Telek";
+            beepitheto_e = _beepitheto_e;
+        }
+        #endregion
+
+
+-----------------------------------------
+
+**				 
+-- A ToString() metódus felüldefiniálása --
+**
+        #region 9.feladat
+        public override string ToString()
+        {
+            return $"{base.ToString()} ({(beepitheto_e ? "BEÉPÍTHETŐ" : "NEM BEÉPÍTHETŐ")})";
+        }
+        #endregion
+
+-----------------------------------------
+
+****				 
+------ Kertesház osztály ------
+****
+
+
+**				 
+-- Kontstruktor --
+**
+        #region 12.feladat
+        public Kerteshaz(string _tipus, string _cim, int _telekmeret,int _lakoterulet, int _negyzetmeterenkenti_ar)
+            :base(_cim, _telekmeret, true, _negyzetmeterenkenti_ar)
+        {
+
+            tipus = _tipus;
+            Lakoterulet = _lakoterulet;
+        }
+        #endregion
+
+        //ToString() metódus felüldefiniálása
+        #region 13.feladat
+        public override string ToString()
+        {
+            return $"{base.ToString()} A lakóterület mérete {lakoterulet}";
+        }
+        #endregion
+
+
+-----------------------------------------
+
+**				 
+-- Lista létrehozása osztályokkal --
+**				
+        //Telek osztályú lista létrehozása
+        private List<Telek> telkek = new List<Telek>();
+
+        //Kertesház osztályú lista létrehozása
+        private List<Kerteshaz> kerteshazak = new List<Kerteshaz>();
+
+        //Ingatlan osztályú lista létrehozása
+        private List<Ingatlan> ingatlan = new List<Ingatlan>();
+
+
+-----------------------------------------
+
+**	
+-- File kiválasztás ablak --
+**	
+
+        OpenFileDialog megnyitas = new OpenFileDialog();
+	
+
+-----------------------------------------
+
+**
+--Fájl megnyitás és beolvasás és split-elés --
+**
+
+if (megnyitas.ShowDialog() == DialogResult.OK)
+            {
+                string[] sorok = File.ReadAllLines(megnyitas.FileName);
+                for (int i = 1; i < sorok.Length; i++)
+                {
+                    // Oszlop nevek szerint felosztva az adatok változókba elmentve
+                    #region oszlop nevek
+                    string tipus = sorok[i].Split(';')[0];
+                    string cim = sorok[i].Split(';')[1];
+                    int telekmeret = Convert.ToInt32(sorok[i].Split(';')[2]);
+                    int negyzetmeterenkenti_ar = Convert.ToInt32(sorok[i].Split(';')[3]);
+                    bool beepitheto_e = sorok[i].Split(';')[4]=="igen"?true : false;
+                    int iranyar = telekmeret * negyzetmeterenkenti_ar;
+
+
+		}
+
+
+	     }		
+
+
+-----------------------------------------
+
+**
+-- Telek típusnál a lista telekosztályhoz hozzáadás
+**
+             if (tipus == "telek")
+             {
+                 //példányosítjuk a Telek osztályt, ha nincs hiba, akkor létrejön az objeltum, és bekerül a listába
+                 telkek.Add(new Telek(cim, telekmeret, beepitheto_e, negyzetmeterenkenti_ar));
+                 lb_telkek.Items.Add(telkek.Last().ToString()); //az új (a listában az utolsó) objektum adatait kiíratjuk
+             }
+
+
+-----------------------------------------
+
+**
+-- Kertesház lista hozzásadás és legnagyobb terület kiválasztása
+**
+                   else if (tipus == "kerteshaz")
+                   {
+                        
+                       // csak itt van értéke a lakóterületnek, ha nem itt lenne a változó, akkor hibát dobna
+                       int lakoterulet = Convert.ToInt32(sorok[i].Split(';')[5]);
+                       kerteshazak.Add(new Kerteshaz(tipus, cim, telekmeret, lakoterulet, negyzetmeterenkenti_ar));
+                       lb_kerteshaz.Items.Add(kerteshazak.Last().ToString());
+                        
+
+                       //Legnagyobb kertű kertes ház
+                       #region Legnagyobb kertű kertes házak
+                       var sorrend = kerteshazak.OrderBy(item => item.KertTerulet);
+                       lb_legnagyobb_kertes_hazak.Items.Add($"{sorrend.Last()}");
+                       #endregion
+
+                   }
+
+
+
+-----------------------------------------
+
+**
+-- 5 és 10 millió közötti telkek:
+**
+
+                   if ((iranyar >= 5000000 && iranyar <= 10000000)&& tipus == "telek")
+                   {
+                      lb_iranyar.Items.Add($"Telek: {telkek}");
+                   }
+
+
+**
+-- Hibaelkapás:
+**
+               catch (Exception ex) //elkapja a konstruktor hívásakor (példányosítás keletkező hibát)
+               {
+                   lb_hibas_adatok.Items.Add($"{i}. sor: {ex.Message}");
+               }
+
+
+
+
+
+
+
+ 
