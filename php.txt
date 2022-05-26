@@ -1,0 +1,84 @@
+<?php
+
+//kapcsolat
+$conn = new mysqli("localhost","root","","kiadas_tervezo");
+
+// Check connection
+if ($conn->connect_error) {
+	die("Kapcsolódási hiba: " . $conn->connect_error);
+}
+
+?>
+-------------------
+<?php
+
+session_start();
+ob_start();
+require_once('connection.php');
+$id = $_SESSION['id'];
+
+// =========  tb_bevetel_kiadas táblázatba való adatok beszúrása:    =========
+$datum_bevitel =  $_POST['datum_bevitel'];
+$kategoria_input =  $_POST['kategoria_input'];
+$ertek_input =  $_POST['ertek_input'];
+
+if ($kategoria_input > 2) {
+    $ertek_input = $ertek_input * (-1);
+}
+$sql = "INSERT INTO tb_bevetel_kiadas (user_id, kategoria_id, ertek, datum) 
+VALUES ('$id','$kategoria_input', '$ertek_input', '$datum_bevitel')";
+$result = $conn->query($sql);
+if ($result) {
+    header("Location: jelentes.php?jelentes_mentes_siker=true");
+} else {
+    echo "Error :" . $sql;
+}
+
+// kapcsolat zárása
+$conn->close();
+--------------------------
+
+
+
+
+
+<?php
+    require_once('connection.php');
+
+    $w = ($_GET['w']);
+    $id = $_SESSION['id'];
+    //kiadások és bevételek lekérdezése és megjelenítése táblázatban havonta
+    $sql = "SELECT ertek, kategoria_nev, datum, tb_bevetel_kiadas.id FROM tb_bevetel_kiadas, tb_kategoria WHERE user_id = '$id'  AND kategoria_id = tb_kategoria.id AND kategoria_id != '1' AND DATE_FORMAT(datum,'%Y-%m') = '$w' ORDER BY datum";
+    $result = $conn->query($sql);
+    if ($result->num_rows > 0) {
+        echo '  <div id="tablazat_gorgetes">
+                
+        while ($row = $result->fetch_assoc()) {
+
+            $kategoria_nev = $row["kategoria_nev"];
+            $ertek = $row["ertek"];
+            $datum = $row["datum"];
+            $bev_kiad_id = $row["id"];
+            echo '<tr>';
+            
+            echo '<td name="havi_datum" id="havi_datum" class="havi_datum">';
+            ';
+        }
+        echo '</tbody>';
+        echo '</table>';
+        echo '</div>';
+    } 
+    // kapcsolat zárása
+    $conn->close();
+    ?>
+-------------------
+ function napiKiadas(str) {
+            var xmlhttp = new XMLHttpRequest();
+            xmlhttp.onreadystatechange = function() {
+                if (this.readyState == 4 && this.status == 200) {
+                    document.getElementById("napi_kiadas").innerHTML = this.responseText;
+                }
+            };
+            xmlhttp.open("GET", "jelentes_datum_lekerdez.php?q=" + str, true);
+            xmlhttp.send();
+        }

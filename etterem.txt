@@ -1,0 +1,14 @@
+<div class="row">
+                <div class="col-md-6">
+                    <div class="card">
+                        <img src="kepek/etlap1.jpg" alt="tejszínes csirke" class="card-img-top">
+                        <div class="card-body">
+                            <h4 class="card-title">TEJSZÍNES-MUSTÁROS CSIRKE ALMÁVAL</h4>
+                            <p class="card-text">
+                                A csirkét vajon megpirítjuk, sóval és borssal ízesítjük. Hozzáadjuk a megtisztított hagymát, a feldarabolt zellert, és néhány percig együtt pirítjuk, majd felöntjük a borral és az alaplével. A kimagozott, gerezdekre vágott almákat megpirítjuk. Tejszínes
+                                kukoricalisztet, mustárt és a tárkonyt keverve a pecsenyeléhez mártást készítünk. A hús-, a zöldség- és az alma darabokat beleforgatjuk a mártásba, majd forrón, friss kenyérrel kínáljuk.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+</div>
